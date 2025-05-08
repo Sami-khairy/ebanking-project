@@ -2,12 +2,14 @@ package ma.khairy.ebankingbackend.services.implementations;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.khairy.ebankingbackend.dto.CustomerDto;
 import ma.khairy.ebankingbackend.entities.*;
 import ma.khairy.ebankingbackend.enums.AccountStatus;
 import ma.khairy.ebankingbackend.enums.OperationType;
 import ma.khairy.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.khairy.ebankingbackend.exceptions.BankAccountNotFoundException;
 import ma.khairy.ebankingbackend.exceptions.CustomerNotFoundException;
+import ma.khairy.ebankingbackend.mappers.CustomerMapper;
 import ma.khairy.ebankingbackend.repositories.AccountOperationRepository;
 import ma.khairy.ebankingbackend.repositories.BankAccountRepository;
 import ma.khairy.ebankingbackend.repositories.CustomerRepository;
@@ -29,10 +31,14 @@ public class BankAccountServiceImpl implements IBankAccountService {
     private BankAccountRepository bankAccountRepository;
     private AccountOperationRepository accountOperationRepository;
 
+    private CustomerMapper customerMapper;
+
 
     @Override
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDto saveCustomer(CustomerDto customerDto) {
+        Customer customer = customerMapper.fromCustomerDto(customerDto);
+        Customer save = customerRepository.save(customer);
+        return customerMapper.fromCustomer(save);
     }
 
     @Override
@@ -71,8 +77,11 @@ public class BankAccountServiceImpl implements IBankAccountService {
     }
 
     @Override
-    public List<Customer> listCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDto> listCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .map(customerMapper::fromCustomer)
+                .toList();
     }
 
     @Override
@@ -124,5 +133,32 @@ public class BankAccountServiceImpl implements IBankAccountService {
     @Override
     public List<BankAccount> bankAccountList() {
         return bankAccountRepository.findAll();
+    }
+
+    @Override
+    public CustomerDto getCustomer(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFoundException("Customer not found with ID: " + id)
+        );
+        return customerMapper.fromCustomer(customer);
+    }
+
+    @Override
+    public CustomerDto updateCustomer(CustomerDto customerDto) {
+        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(
+                () -> new CustomerNotFoundException("Customer not found with ID: " + customerDto.getId())
+        );
+        customer.setName(customerDto.getName());
+        customer.setEmail(customerDto.getEmail());
+        customer = customerRepository.save(customer);
+        return customerMapper.fromCustomer(customer);
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFoundException("Customer not found with ID: " + id)
+        );
+        customerRepository.delete(customer);
     }
 }

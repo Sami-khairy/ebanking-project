@@ -1,5 +1,6 @@
 package ma.khairy.ebankingbackend;
 
+import ma.khairy.ebankingbackend.dto.CustomerDto;
 import ma.khairy.ebankingbackend.entities.AccountOperation;
 import ma.khairy.ebankingbackend.entities.CurrentAccount;
 import ma.khairy.ebankingbackend.entities.Customer;
@@ -78,7 +79,7 @@ public class EbankingBackendApplication {
             IBankAccountService bankAccountService) {
         return args -> {
             Stream.of("Hassan", "Imane", "Sami").forEach(name -> {
-                Customer customer = new Customer();
+                CustomerDto customer = new CustomerDto();
                 customer.setName(name);
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);
