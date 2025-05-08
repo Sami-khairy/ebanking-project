@@ -1,6 +1,6 @@
 package ma.khairy.ebankingbackend.services;
 
-import ma.khairy.ebankingbackend.dto.CustomerDto;
+import ma.khairy.ebankingbackend.dto.*;
 import ma.khairy.ebankingbackend.entities.BankAccount;
 import ma.khairy.ebankingbackend.entities.CurrentAccount;
 import ma.khairy.ebankingbackend.entities.Customer;
@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface IBankAccountService {
     CustomerDto saveCustomer(CustomerDto customerDto);
-    CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId);
-    SavingAccount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId);
+    CurrentBankAccountDto saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId);
+    SavingBankAccountDto saveSavingBankAccount(double initialBalance, double interestRate, Long customerId);
     List<CustomerDto> listCustomers();
-    BankAccount getBankAccount(String accountId);
+    BankAccountDto getBankAccount(String accountId);
     void debit(String accountId, double amount, String description);
     void credit(String accountId, double amount, String description);
     void transfer(String accountIdSource, String accountIdDestination, double amount);
-    List<BankAccount> bankAccountList();
+    List<BankAccountDto> bankAccountList();
     CustomerDto getCustomer(Long id);
-
     CustomerDto updateCustomer(CustomerDto customerDto);
-
     void deleteCustomer(Long id);
+    List<AccountOperationDto> accountHistory(String accountId);
+    AccountHistoryDto getAccountHistory(String accountId, int page, int size);
 }
