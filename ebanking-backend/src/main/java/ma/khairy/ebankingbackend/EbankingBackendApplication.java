@@ -9,6 +9,8 @@ import ma.khairy.ebankingbackend.enums.OperationType;
 import ma.khairy.ebankingbackend.repositories.AccountOperationRepository;
 import ma.khairy.ebankingbackend.repositories.BankAccountRepository;
 import ma.khairy.ebankingbackend.repositories.CustomerRepository;
+import ma.khairy.ebankingbackend.services.IBankAccountService;
+import ma.khairy.ebankingbackend.services.implementations.BankAccountServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -68,6 +70,33 @@ public class EbankingBackendApplication {
                     accountOperationRepository.save(accountOperation);
                 }
             });
+        };
+    }
+
+//    @Bean
+    CommandLineRunner commandLineRunner2(
+            IBankAccountService bankAccountService) {
+        return args -> {
+            Stream.of("Hassan", "Imane", "Sami").forEach(name -> {
+                Customer customer = new Customer();
+                customer.setName(name);
+                customer.setEmail(name + "@gmail.com");
+                bankAccountService.saveCustomer(customer);
+            });
+            bankAccountService.listCustomers().forEach(
+                    customer -> {
+                        bankAccountService.saveCurrentBankAccount(10000, 2000, customer.getId());
+                        bankAccountService.saveSavingBankAccount(20000, 5.5, customer.getId());
+                        bankAccountService.bankAccountList().forEach(
+                                account -> {
+                                    for (int i = 0; i < 10; i++) {
+                                        bankAccountService.credit(account.getId(), Math.random() * 900, "credit");
+                                        bankAccountService.debit(account.getId(), Math.random() * 900, "debit");
+                                    }
+                                }
+                        );
+                    }
+            );
         };
     }
 }
