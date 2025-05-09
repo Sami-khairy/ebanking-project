@@ -3,12 +3,14 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {NgIf} from "@angular/common";
 import {Customer} from "../model/Customer.model";
 import {CustomerService} from "../services/customer.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-new-customer',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './new-customer.component.html',
   styleUrl: './new-customer.component.css'
@@ -18,7 +20,8 @@ export class NewCustomerComponent implements OnInit {
   newCustomerFormGroup !: FormGroup;
 
   constructor(private formBuilder : FormBuilder,
-              private CustomerService : CustomerService) {
+              private CustomerService : CustomerService,
+              private router : Router) {
   }
 
   ngOnInit(): void {
@@ -36,7 +39,8 @@ export class NewCustomerComponent implements OnInit {
     this.CustomerService.saveCustomer(customer).subscribe({
       next: (data) => {
         alert("Customer saved successfully");
-        this.newCustomerFormGroup.reset();
+        // this.newCustomerFormGroup.reset();
+        this.router.navigateByUrl("/customers");
       },
       error: (err) => {
         console.log(err);
