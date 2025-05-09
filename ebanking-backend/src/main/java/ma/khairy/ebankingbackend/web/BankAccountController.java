@@ -1,9 +1,7 @@
 package ma.khairy.ebankingbackend.web;
 
 import lombok.AllArgsConstructor;
-import ma.khairy.ebankingbackend.dto.AccountHistoryDto;
-import ma.khairy.ebankingbackend.dto.AccountOperationDto;
-import ma.khairy.ebankingbackend.dto.BankAccountDto;
+import ma.khairy.ebankingbackend.dto.*;
 import ma.khairy.ebankingbackend.services.IBankAccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +34,23 @@ public class BankAccountController {
                                             @RequestParam(name = "page", defaultValue = "0") int page,
                                             @RequestParam(name = "size", defaultValue = "10") int size) {
         return bankAccountService.getAccountHistory(accountId, page, size);
+    }
+
+    @PostMapping("/accounts/debit")
+    public DebitDTO debit(@RequestBody DebitDTO debitDTO) {
+        this.bankAccountService.debit(debitDTO.getAccountId(),debitDTO.getAmount(),debitDTO.getDescription());
+        return debitDTO;
+    }
+    @PostMapping("/accounts/credit")
+    public CreditDTO credit(@RequestBody CreditDTO creditDTO) {
+        this.bankAccountService.credit(creditDTO.getAccountId(),creditDTO.getAmount(),creditDTO.getDescription());
+        return creditDTO;
+    }
+    @PostMapping("/accounts/transfer")
+    public void transfer(@RequestBody TransferRequestDTO transferRequestDTO) {
+        this.bankAccountService.transfer(
+                transferRequestDTO.getAccountSource(),
+                transferRequestDTO.getAccountDestination(),
+                transferRequestDTO.getAmount());
     }
 }
