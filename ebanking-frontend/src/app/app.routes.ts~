@@ -1,17 +1,15 @@
 import { Routes } from '@angular/router';
+import {AccountsComponent} from "./accounts/accounts.component";
+import {CustomersComponent} from "./customers/customers.component";
 
 export const routes: Routes = [
   {
-    path: 'accounts',
-    loadComponent: () =>
-      import('./accounts/accounts.component').then(
-        (m) => m.AccountsComponent
-      ),
+    path: 'accounts',component: AccountsComponent
   },
   {
-    path: 'customers',
-    loadComponent: () =>
-      import('./customers/customers.component').then(
-        (m) => m.CustomersComponent
-      )
+    path: 'customers',component: CustomersComponent
+  },
+  {
+    path: 'new-customer',component: CustomersComponent
+  }
 ];
