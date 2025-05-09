@@ -48,4 +48,18 @@ export class CustomersComponent implements OnInit{
       })
     );
   }
+
+  handeleDeleteCustomer(id: number) {
+    this.customerService.deleteCustomer(id).subscribe({
+      next: () => {
+        this.customers = this.customerService.getCustomers().pipe(
+          // Handle the response and errors here
+          catchError((error) => {
+            this.errorMessage = error.message;
+            return throwError(error);
+          })
+        );
+      },
+    })
+  }
 }

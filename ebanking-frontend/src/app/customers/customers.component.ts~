@@ -34,13 +34,7 @@ export class CustomersComponent implements OnInit{
         keyword: this.formBuilder.control("")
       });
 
-      this.customers = this.customerService.getCustomers().pipe(
-        // Handle the response and errors here
-        catchError((error) => {
-          this.errorMessage = error.message;
-          return throwError(error);
-        })
-      );
+      this.handleSearchCustomers();
     }
 
   handleSearchCustomers() {
@@ -53,5 +47,9 @@ export class CustomersComponent implements OnInit{
         return throwError(error);
       })
     );
+  }
+
+  handeleDeleteCustomer(id: number) {
+    
   }
 }

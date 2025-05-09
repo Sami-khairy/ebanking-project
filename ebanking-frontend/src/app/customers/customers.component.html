@@ -32,7 +32,7 @@
           <td>{{ customer.email }}</td>
           <td>
             <button class="btn btn-primary">Voir</button>
-            <button class="btn btn-danger">Supprimer</button>
+            <button (click)="handeleDeleteCustomer(customer.id)" class="btn btn-danger">Supprimer</button>
           </td>
         </tr>
         </tbody>

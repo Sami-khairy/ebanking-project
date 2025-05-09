@@ -24,7 +24,7 @@ public class BankAccount {
     private AccountStatus status;
     @ManyToOne
     private Customer customer;
-    @OneToMany(mappedBy = "bankAccount")
+    @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<AccountOperation> accountOperations;
 
 }
