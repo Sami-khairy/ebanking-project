@@ -30,7 +30,7 @@ public class EbankingBackendApplication {
         SpringApplication.run(EbankingBackendApplication.class, args);
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner(
             BankAccountRepository bankAccountRepository,
             CustomerRepository customerRepository,
@@ -76,7 +76,7 @@ public class EbankingBackendApplication {
         };
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner2(
             IBankAccountService bankAccountService) {
         return args -> {
