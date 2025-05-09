@@ -23,4 +23,5 @@ public interface IBankAccountService {
     void deleteCustomer(Long id);
     List<AccountOperationDto> accountHistory(String accountId);
     AccountHistoryDto getAccountHistory(String accountId, int page, int size);
+    List<CustomerDto> searchCustomers(String keyword);
 }

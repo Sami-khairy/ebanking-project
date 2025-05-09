@@ -222,4 +222,11 @@ public class BankAccountServiceImpl implements IBankAccountService {
         return accountHistoryDto;
     }
 
+    @Override
+    public List<CustomerDto> searchCustomers(String keyword) {
+        return customerRepository.findByNameContaining(keyword).stream()
+                .map(customerMapper::fromCustomer)
+                .collect(toList());
+    }
+
 }

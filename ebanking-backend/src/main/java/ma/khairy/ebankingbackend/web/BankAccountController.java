@@ -5,15 +5,13 @@ import ma.khairy.ebankingbackend.dto.AccountHistoryDto;
 import ma.khairy.ebankingbackend.dto.AccountOperationDto;
 import ma.khairy.ebankingbackend.dto.BankAccountDto;
 import ma.khairy.ebankingbackend.services.IBankAccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class BankAccountController {
 
     private IBankAccountService bankAccountService;
