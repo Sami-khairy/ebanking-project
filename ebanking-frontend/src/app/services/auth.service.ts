@@ -66,8 +66,7 @@ export class AuthService {
     const token = window.localStorage.getItem("jwt-token");
     if (token) {
       this.loadProfile({ "access-token": token });
-      this.router.navigateByUrl("/admin/customers");
+      // Ne pas forcer la redirection ici
     }
-
   }
 }

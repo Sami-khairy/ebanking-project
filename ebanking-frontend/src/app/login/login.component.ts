@@ -1,54 +1,64 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule
-  ],
+  imports: [ReactiveFormsModule, NgIf, NgClass],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  loading = false;
+  submitted = false;
+  errorMessage = '';
+  showPassword = false;
 
-  formLogin!: FormGroup;
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  constructor(private fb : FormBuilder,
-              private authService : AuthService,
-              private router : Router) {
-
+  ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      remember: [false]
+    });
   }
 
+  // getter pour un accès facile aux champs du formulaire
+  get f() { return this.loginForm.controls; }
 
-  ngOnInit(): void {
-    // Initialization logic here
-    this.formLogin = this.fb.group({
-      username : this.fb.control(''),
-      password : this.fb.control('')
-    })
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   handleLogin() {
-    console.log("Tentative de connexion avec:", this.formLogin.value);
-    this.authService.login(this.formLogin.value.username, this.formLogin.value.password).subscribe(
-      {
+    this.submitted = true;
+    this.errorMessage = '';
+
+    // Arrêter ici si le formulaire est invalide
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this.loading = true;
+    this.authService.login(this.f['username'].value, this.f['password'].value)
+      .subscribe({
         next: (data) => {
-          console.log("Réponse du serveur:", data);
           this.authService.loadProfile(data);
-          if (this.authService.isAuthenticated) {
-            this.router.navigateByUrl("/admin");
-          } else {
-            alert("Erreur d'authentification: token invalide");
-          }
+          this.router.navigateByUrl("/admin/dashboard");
         },
         error: (err) => {
-          console.log("Erreur d'authentification:", err);
-          alert("Échec de connexion: " + (err.message || "Identifiants invalides"));
+          this.errorMessage = "Nom d'utilisateur ou mot de passe incorrect";
+          this.loading = false;
         }
-      }
-    );
+      });
   }
 }

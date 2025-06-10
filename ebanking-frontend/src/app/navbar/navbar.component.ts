@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
+import {Router, RouterLink, RouterModule} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 import {NgIf} from "@angular/common";
 
@@ -8,6 +8,7 @@ import {NgIf} from "@angular/common";
   standalone: true,
   imports: [
     RouterLink,
+    RouterModule,
     NgIf
   ],
   templateUrl: './navbar.component.html',
